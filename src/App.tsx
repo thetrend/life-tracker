@@ -1,5 +1,7 @@
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import styled from 'styled-components'
 import tw from 'twin.macro'
+import { GuestWelcome, Register } from './components'
 
 const StyledApp = styled.div`
   ${tw`
@@ -14,17 +16,16 @@ const StyledApp = styled.div`
   `}
 `
 
-const StyledHero = styled.div`
-  ${tw`
-    p-8 rounded-xl shadow-md w-96 bg-app-primary text-app-bg-light bg-opacity-50 text-center
-  `}
-`
-
 function App() {
   return (
-    <StyledApp>
-      <StyledHero>Hello World</StyledHero>
-    </StyledApp>
+    <Router>
+      <StyledApp>
+        <Routes>
+          <Route path="/" element={<GuestWelcome />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </StyledApp>
+    </Router>
   )
 }
 
