@@ -69,7 +69,7 @@ const handler: Handler = async (event) => {
           email,
           username,
           display,
-          password: hashPassword(password),
+          password: await hashPassword(password),
           birthday: formattedBirthday,
           timezone,
         },
