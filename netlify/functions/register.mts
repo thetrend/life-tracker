@@ -1,7 +1,7 @@
 import { Handler } from '@netlify/functions'
 import argon2 from 'argon2'
 import { query as q } from 'faunadb'
-import omit from 'lodash/omit'
+import omit from 'lodash/omit.js'
 import { ZodError } from 'zod'
 import { DateTime } from 'luxon'
 import client from '../../src/lib/fauna'
@@ -76,13 +76,7 @@ const handler: Handler = async (event) => {
     }
   } catch (error: unknown) {
     if (error instanceof ZodError) {
-      const errors = error.errors.reduce(
-        (acc, err) => {
-          acc[err.path[0]] = err.message
-          return acc
-        },
-        {} as Record<string, string>
-      )
+      const errors = error.flatten().fieldErrors
 
       return {
         statusCode: 400,

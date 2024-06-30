@@ -202,6 +202,7 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
           type="text"
           value={formData.timezone}
           readOnly
+          disabled
           aria-labelledby="timezone-label"
           className="input input-bordered w-full"
         />

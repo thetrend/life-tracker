@@ -1,6 +1,6 @@
 import { Handler } from '@netlify/functions'
 
-const handler: Handler = async (event, context) => {
+const handler: Handler = async (event) => {
   const USER_ZERO = process.env.USER_ZERO as string
 
   if (event.httpMethod !== 'POST') {

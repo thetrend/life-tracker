@@ -1,8 +1,8 @@
 import { Handler } from '@netlify/functions'
-import { query as q } from 'faunadb'
+import { query as q } from 'faunadb' // Import `faunadb` as a default import
 import client from '../../src/lib/fauna'
 
-const handler: Handler = async (event, context) => {
+const handler: Handler = async (event) => {
   if (event.httpMethod !== 'GET') {
     return {
       statusCode: 405,
@@ -19,10 +19,16 @@ const handler: Handler = async (event, context) => {
       statusCode: 200,
       body: JSON.stringify({ count }),
     }
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: error.message }),
+      }
+    }
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
+      body: JSON.stringify({ error: 'An unknown error occurred' }),
     }
   }
 }
