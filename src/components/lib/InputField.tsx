@@ -1,0 +1,53 @@
+interface InputFieldProps {
+  id: string
+  type: string
+  name: string
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  placeholder?: string
+  readOnly?: boolean
+  disabled?: boolean
+  error?: string
+}
+
+function InputField({
+  id,
+  type,
+  name,
+  value,
+  onChange,
+  placeholder = '',
+  readOnly = false,
+  disabled = false,
+  error = '',
+}: InputFieldProps) {
+  return (
+    <div className="form-control">
+      <input
+        id={id}
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        readOnly={readOnly}
+        disabled={disabled}
+        aria-labelledby={`${id}-label`}
+        className="input input-bordered w-full"
+      />
+      <span id={`${id}-label`} className="sr-only">
+        {placeholder}
+      </span>
+      {error && <p className="text-error text-sm mt-1">{error}</p>}
+    </div>
+  )
+}
+
+InputField.defaultProps = {
+  placeholder: '',
+  readOnly: false,
+  disabled: false,
+  error: '',
+}
+
+export default InputField

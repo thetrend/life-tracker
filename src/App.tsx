@@ -10,8 +10,18 @@ const StyledApp = styled.div`
     min-h-screen 
     p-2 
     flex 
-    items-center 
+    flex-col 
+    items-center
     justify-center
+  `}
+`
+
+const ThemeToggleWrapper = styled.div`
+  ${tw`
+    absolute 
+    top-2 
+    right-2 
+    z-10
   `}
 `
 
@@ -19,11 +29,13 @@ function App() {
   return (
     <Router>
       <StyledApp>
+        <ThemeToggleWrapper>
+          <ThemeToggle />
+        </ThemeToggleWrapper>
         <Routes>
           <Route path="/" element={<GuestWelcome />} />
           <Route path="/register" element={<Register />} />
         </Routes>
-        <ThemeToggle />
       </StyledApp>
     </Router>
   )
