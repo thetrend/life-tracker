@@ -1,6 +1,6 @@
 import { Handler } from '@netlify/functions'
 import argon2 from 'argon2'
-import { query as q } from 'faunadb'
+import faunadb from 'faunadb'
 import omit from 'lodash/omit.js'
 import { ZodError } from 'zod'
 import { DateTime } from 'luxon'
@@ -13,6 +13,8 @@ interface FaunaDBErrorResponse {
     responseRaw: string
   }
 }
+
+const { query: q } = faunadb
 
 const handler: Handler = async (event) => {
   if (event.httpMethod !== 'POST') {

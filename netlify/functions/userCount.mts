@@ -1,6 +1,8 @@
 import { Handler } from '@netlify/functions'
-import { query as q } from 'faunadb' // Import `faunadb` as a default import
+import faunadb from 'faunadb'
 import client from '../../src/lib/fauna'
+
+const { query: q } = faunadb
 
 const handler: Handler = async (event) => {
   if (event.httpMethod !== 'GET') {
