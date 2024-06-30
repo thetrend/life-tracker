@@ -79,7 +79,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Email Input */}
       <div className="form-control">
         <input
           id="email"
@@ -96,7 +95,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         </span>
       </div>
 
-      {/* Display Name Input */}
       <div className="form-control">
         <input
           id="display"
@@ -117,7 +115,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         )}
       </div>
 
-      {/* Password Input */}
       <div className="form-control">
         <input
           id="password"
@@ -138,7 +135,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         )}
       </div>
 
-      {/* Verify Password Input */}
       <div className="form-control">
         <input
           id="verifiedPassword"
@@ -159,7 +155,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         )}
       </div>
 
-      {/* Username Input */}
       <div className="form-control">
         <input
           id="username"
@@ -180,7 +175,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         )}
       </div>
 
-      {/* Birthday Input */}
       <div className="form-control">
         <input
           id="birthday"
@@ -201,7 +195,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         )}
       </div>
 
-      {/* Timezone Input */}
       <div className="form-control">
         <input
           id="timezone"
@@ -217,7 +210,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         </span>
       </div>
 
-      {/* Server Error Message */}
       {serverError && (
         <div className="alert alert-error">
           <div className="flex-1">
@@ -226,7 +218,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         </div>
       )}
 
-      {/* Success Message */}
       {successMessage && (
         <div className="alert alert-success">
           <div className="flex-1">
@@ -235,7 +226,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         </div>
       )}
 
-      {/* Submit Button */}
       <button
         type="submit"
         className="btn btn-primary w-full"
