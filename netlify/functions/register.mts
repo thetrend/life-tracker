@@ -3,7 +3,7 @@ import faunadb from 'faunadb'
 import omit from 'lodash/omit.js'
 import { ZodError } from 'zod'
 import { DateTime } from 'luxon'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import client from '../../src/lib/fauna'
 import userSchema from '../../src/schemas/user'
 
@@ -50,7 +50,7 @@ const handler: Handler = async (event) => {
     const saltRounds = 10
 
     // Hash password using bcrypt
-    const hashPassword = async (password: string | Buffer) => {
+    const hashPassword = async (password: string) => {
       try {
         const hash = await bcrypt.hash(password, saltRounds)
         return hash
