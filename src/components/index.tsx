@@ -1,5 +1,4 @@
-import GuestWelcome from './GuestWelcome'
+import ThemeToggle from './ThemeToggle'
 
-import Register from './auth/Register'
-
-export { GuestWelcome, Register }
+// eslint-disable-next-line import/prefer-default-export
+export { ThemeToggle }
