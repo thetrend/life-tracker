@@ -1,4 +1,5 @@
 import ThemeToggle from './ThemeToggle'
+import RegisterFirstUser from './RegisterFirstUser'
+import RegisterUser from './RegisterUser'
 
-// eslint-disable-next-line import/prefer-default-export
-export { ThemeToggle }
+export { ThemeToggle, RegisterFirstUser, RegisterUser }
