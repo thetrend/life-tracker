@@ -1,9 +1,9 @@
 import { Handler } from '@netlify/functions'
-import argon2 from 'argon2'
 import faunadb from 'faunadb'
 import omit from 'lodash/omit.js'
 import { ZodError } from 'zod'
 import { DateTime } from 'luxon'
+import bcrypt from 'bcrypt'
 import client from '../../src/lib/fauna'
 import userSchema from '../../src/schemas/user'
 
@@ -46,8 +46,18 @@ const handler: Handler = async (event) => {
       timezone,
     })
 
-    // Hash password using argon2
-    const hashedPassword = await argon2.hash(password)
+    // bcrypt salt rounds
+    const saltRounds = 10
+
+    // Hash password using bcrypt
+    const hashPassword = async (password: string | Buffer) => {
+      try {
+        const hash = await bcrypt.hash(password, saltRounds)
+        return hash
+      } catch (error) {
+        console.error('Error hashing password: ', error)
+      }
+    }
 
     // Parse and format birthday using Luxon
     const formattedBirthday = DateTime.fromISO(birthday).toISODate()
@@ -59,7 +69,7 @@ const handler: Handler = async (event) => {
           email,
           username,
           display,
-          password: hashedPassword,
+          password: hashPassword(password),
           birthday: formattedBirthday,
           timezone,
         },
