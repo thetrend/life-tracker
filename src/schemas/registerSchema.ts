@@ -1,6 +1,6 @@
 import { string, object } from 'zod'
 
-const userSchema = object({
+const registerSchema = object({
   email: string().email('Invalid email address'),
   display: string().min(1, 'Display name must be at least 1 character'),
   password: string()
@@ -17,4 +17,4 @@ const userSchema = object({
   path: ['verifiedPassword'],
 })
 
-export default userSchema
+export default registerSchema

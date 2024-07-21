@@ -1,31 +1,17 @@
 import { useState } from 'react'
-import { DateTime } from 'luxon'
 import axios from 'axios'
 import { ZodError } from 'zod'
-import userSchema from '../schemas/registerSchema'
 import InputField from './lib/InputField'
 
-interface ShowRegisterFormProps {
-  email: string
-}
-
 interface FormErrors {
-  display?: string
+  email?: string
   password?: string
-  verifiedPassword?: string
-  username?: string
-  birthday?: string
 }
 
-function ShowRegisterForm({ email }: ShowRegisterFormProps) {
+function LoginForm() {
   const [formData, setFormData] = useState({
-    email,
-    display: '',
+    email: '',
     password: '',
-    verifiedPassword: '',
-    username: '',
-    birthday: '',
-    timezone: DateTime.local().zoneName,
   })
 
   const [errors, setErrors] = useState<FormErrors>({})
@@ -50,11 +36,11 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
     setSuccessMessage('')
 
     try {
-      userSchema.parse(formData)
-      const response = await axios.post('/api/register', formData)
+      // loginSchema.parse(formData)
+      const response = await axios.post('/api/login', formData)
 
-      if (response.status === 201) {
-        setSuccessMessage('User registered successfully!')
+      if (response.status === 200) {
+        setSuccessMessage('Login successful!')
       } else {
         setServerError('Unexpected response from server.')
       }
@@ -68,8 +54,8 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
           }
         })
         setErrors(formattedErrors)
-      } else if (axios.isAxiosError(error) && error.response?.status === 409) {
-        setServerError('A user with this email or username already exists.')
+      } else if (axios.isAxiosError(error) && error.response?.status === 401) {
+        setServerError('Invalid email or password.')
       } else {
         setServerError('An unexpected error occurred. Please try again later.')
       }
@@ -79,25 +65,21 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 p-6 bg-base-200 rounded-lg shadow-md"
+    >
+      <h2 className="text-xl font-bold text-center">Login</h2>
+
       <InputField
         id="email"
         type="email"
         name="email"
         value={formData.email}
         onChange={handleChange}
-        readOnly
-        disabled
         placeholder="Email"
-      />
-      <InputField
-        id="display"
-        type="text"
-        name="display"
-        value={formData.display}
-        onChange={handleChange}
-        placeholder="Display Name"
-        error={errors.display}
+        error={errors.email}
+        aria-label="Email address"
       />
       <InputField
         id="password"
@@ -107,43 +89,7 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         onChange={handleChange}
         placeholder="Password"
         error={errors.password}
-      />
-      <InputField
-        id="verifiedPassword"
-        type="password"
-        name="verifiedPassword"
-        value={formData.verifiedPassword}
-        onChange={handleChange}
-        placeholder="Verify Password"
-        error={errors.verifiedPassword}
-      />
-      <InputField
-        id="username"
-        type="text"
-        name="username"
-        value={formData.username}
-        onChange={handleChange}
-        placeholder="Username"
-        error={errors.username}
-      />
-      <InputField
-        id="birthday"
-        type="date"
-        name="birthday"
-        value={formData.birthday}
-        onChange={handleChange}
-        placeholder="Birthday"
-        error={errors.birthday}
-      />
-      <InputField
-        id="timezone"
-        type="text"
-        name="timezone"
-        value={formData.timezone}
-        onChange={handleChange}
-        readOnly
-        disabled
-        placeholder="Timezone"
+        aria-label="Password"
       />
 
       {serverError && (
@@ -167,10 +113,10 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         className="btn btn-primary w-full"
         disabled={loading}
       >
-        {loading ? 'Registering...' : 'Register'}
+        {loading ? 'Logging in...' : 'Login'}
       </button>
     </form>
   )
 }
 
-export default ShowRegisterForm
+export default LoginForm
