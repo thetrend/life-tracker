@@ -7,6 +7,7 @@ function getBackendConfig() {
     throw new Error('Environment variables are missing.')
   }
   return {
+    debug: true,
     supertokens: {
       connectionURI: process.env.ST_CONNECTION_URI as string,
       apiKey: process.env.ST_API_KEY as string,
