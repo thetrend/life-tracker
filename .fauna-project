@@ -1,0 +1,6 @@
+schema_directory=.fauna
+default=dev
+
+[environment.dev]
+endpoint=cloud-us
+database=lifetracker

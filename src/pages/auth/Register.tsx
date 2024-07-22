@@ -27,7 +27,7 @@ function Register() {
 
       try {
         // Replace with your actual endpoint URL
-        const response = await axios.get<UserCountResponse>('/api/userCount')
+        const response = await axios.get<UserCountResponse>('/api/count')
 
         // Set the count from the response data
         setCount(response.data.count)

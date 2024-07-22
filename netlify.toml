@@ -1,6 +1,6 @@
 [build]
 command = "vite build"
-functions = "netlify/functions"
+functions = "backend/functions"
 publish = "dist"
 
 [functions]

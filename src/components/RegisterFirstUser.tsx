@@ -1,12 +1,13 @@
 import axios from 'axios'
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react'
 import RegisterUser from './RegisterUser'
 import ShowRegisterForm from './ShowRegisterForm'
 
 interface CheckEmailResponse {
   match: boolean
+  registered: boolean
 }
 
 interface ErrorResponse {
@@ -16,6 +17,7 @@ interface ErrorResponse {
 function RegisterFirstUser() {
   const [email, setEmail] = useState<string>('')
   const [match, setMatch] = useState<boolean | null>(null)
+  const [isRegistered, setIsRegistered] = useState<boolean | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -24,10 +26,16 @@ function RegisterFirstUser() {
     setError(null) // Clear previous errors
 
     try {
-      const response = await axios.post<CheckEmailResponse>('/api/checkEmail', {
+      const response = await axios.post<CheckEmailResponse>('/api/email', {
         email,
       })
+
+      if (!response.data.match) {
+        setError('Signup is currently invitation-only. Come back later.')
+      }
+
       setMatch(response.data.match)
+      setIsRegistered(response.data.registered)
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         const errorResponse = err.response.data as ErrorResponse
@@ -44,30 +52,34 @@ function RegisterFirstUser() {
   if (loading) {
     content = <p>Loading...</p>
   } else if (error) {
-    content = <p>Error: {error}</p>
-  } else if (match === null) {
+    content = <p>{error}</p>
+  } else if (!match) {
     content = (
-      <div className="relative">
+      <form className="relative w-[50vw]" onSubmit={handleCheckEmail}>
         <input
-          type="text"
+          type="email"
           value={email}
+          required
           onChange={(e) => setEmail(e.target.value)}
           className="input input-bordered w-full pr-16"
           placeholder="Email"
         />
         <button
-          onClick={handleCheckEmail}
           className="absolute inset-y-0 right-0 flex items-center px-4"
           disabled={loading}
           aria-label="Check Email"
-          type="button"
+          type="submit"
         >
           <FontAwesomeIcon icon={faUserPlus} />
         </button>
-      </div>
+      </form>
     )
   } else if (match) {
-    content = <ShowRegisterForm email={email} />
+    if (isRegistered) {
+      content = "Looks like you're already registered. Please log in."
+    } else {
+      content = <ShowRegisterForm email={email} />
+    }
   } else {
     content = <RegisterUser />
   }

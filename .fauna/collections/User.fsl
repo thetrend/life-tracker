@@ -1,0 +1,19 @@
+collection User {
+  email: String
+  username: String
+  display: String
+  birthday: String
+  timezone: String
+
+  index byEmail {
+    terms [.email]
+  }
+
+  unique [.email]
+
+  index byUsername {
+    terms [.username]
+  }
+
+  unique [.username]
+}

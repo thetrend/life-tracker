@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 interface InputFieldProps {
   id: string
   type: string
@@ -41,13 +42,6 @@ function InputField({
       {error && <p className="text-error text-sm mt-1">{error}</p>}
     </div>
   )
-}
-
-InputField.defaultProps = {
-  placeholder: '',
-  readOnly: false,
-  disabled: false,
-  error: '',
 }
 
 export default InputField

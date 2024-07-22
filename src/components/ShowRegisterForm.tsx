@@ -1,7 +1,8 @@
+import axios from 'axios'
 import { useState } from 'react'
 import { DateTime } from 'luxon'
-import axios from 'axios'
 import { ZodError } from 'zod'
+import { signUp } from 'supertokens-auth-react/recipe/emailpassword'
 import userSchema from '../schemas/registerSchema'
 import InputField from './lib/InputField'
 
@@ -43,7 +44,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     setLoading(true)
     setErrors({})
     setServerError('')
@@ -51,12 +51,31 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
 
     try {
       userSchema.parse(formData)
-      const response = await axios.post('/api/register', formData)
+      const stResponse = await signUp({
+        formFields: [
+          {
+            id: 'email',
+            value: formData.email,
+          },
+          {
+            id: 'password',
+            value: formData.password,
+          },
+        ],
+      })
 
-      if (response.status === 201) {
-        setSuccessMessage('User registered successfully!')
+      // eslint-disable-next-line no-console
+      console.log(stResponse)
+
+      if (stResponse.status === 'SIGN_UP_NOT_ALLOWED') {
+        setServerError(stResponse.reason)
       } else {
-        setServerError('Unexpected response from server.')
+        const apiResponse = await axios.post('/api/register', formData)
+        if (apiResponse.status === 201) {
+          setSuccessMessage('Successfully registered! You may now log in.')
+        } else {
+          setServerError('Unexpected response from server.')
+        }
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -70,8 +89,6 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
         setErrors(formattedErrors)
       } else if (axios.isAxiosError(error) && error.response?.status === 409) {
         setServerError('A user with this email or username already exists.')
-      } else {
-        setServerError('An unexpected error occurred. Please try again later.')
       }
     } finally {
       setLoading(false)
@@ -79,7 +96,7 @@ function ShowRegisterForm({ email }: ShowRegisterFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 w-[50vw]">
       <InputField
         id="email"
         type="email"
